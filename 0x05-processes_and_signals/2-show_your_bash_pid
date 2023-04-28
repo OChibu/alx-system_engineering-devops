@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# ignore shellcheck warning about using `ps` command
+# to get PID of Bash process
+# shellcheck disable=SC2009
+
+ps -ef | grep bash | grep -v grep
