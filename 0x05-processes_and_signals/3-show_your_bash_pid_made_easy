@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# use pgrep command to find process IDs of processes with "bash" in their name
+
+pgrep -f bash | while read pid; do
+
+    # use awk to extract process name from /proc/<pid>/cmdline file
+
+    name=$(awk 'BEGIN{FS="\0"}{print $1}' "/proc/$pid/cmdline")
+    echo "PID: $pid, Process name: $name"
+
+done
