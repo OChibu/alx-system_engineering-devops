@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
+# How to connect to a server
 
-#Connect to your server
+hostname="54.88.183.190"
+#private_key="~/.ssh/school"
+user="ubuntu"
 
-ssh -i ~/.ssh/school ubuntu@54.88.183.190
+ssh "$user"@"$hostname" -i ~/.ssh/school
