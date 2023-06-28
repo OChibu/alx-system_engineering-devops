@@ -1,15 +1,6 @@
-class{'nginx':
-    manage_repo => true,
-    package_source => 'nginx-mainline'
-}
-nginx::resource::location {'server-location':
-    location_cfg_append => {
-        'rewrite' => '^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;'
-    }
-}
-file { '/var/www/html/index.html':
-    content => 'Hello World!'
-}
-file { '/var/www/html/error404.html':
-    content => "Ceci n'est pas une page"
+# Installs a Nginx server
+
+exec {'install':
+  provider => shell,
+  command  => 'sudo apt-get -y update ; sudo apt-get -y install nginx ; echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html ; sudo sed -i "s/server_name _;/server_name _;\n\trewrite ^\/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;/" /etc/nginx/sites-available/default ; sudo service nginx start',
 }
