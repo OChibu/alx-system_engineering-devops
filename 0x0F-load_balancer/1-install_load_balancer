@@ -41,12 +41,12 @@ defaults
 
 frontend ochibu101-tech-frontend
     bind *:80
-    default_backend clickviral-tech-backend
+    default_backend ochibu-tech-backend
 
 backend ochibu101-tech-backend
     balance roundrobin
     server 212831-web-01 54.88.183.190:80 check
-    server 212831-web-02 54.88.183.190:80 check
+    server 212831-web-02 34.229.72.49:80 check
 "
 
 # shellcheck disable=SC2154
