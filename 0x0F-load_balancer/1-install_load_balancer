@@ -39,11 +39,11 @@ defaults
   timeout server 15s
   timeout http-request 10s
 
-frontend ochibu101-tech-frontend
+frontend clickviral-tech-frontend
     bind *:80
-    default_backend ochibu-tech-backend
+    default_backend clickviral-tech-backend
 
-backend ochibu101-tech-backend
+backend clickviral-tech-backend
     balance roundrobin
     server 212831-web-01 54.88.183.190:80 check
     server 212831-web-02 34.229.72.49:80 check
