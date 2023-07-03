@@ -45,8 +45,8 @@ frontend ochibu101-tech-frontend
 
 backend ochibu101-tech-backend
     balance roundrobin
-    server 212831-web-01 18.234.105.207:80 check
-    server 212831-web-02 34.234.204.132:80 check
+    server 212831-web-01 54.88.183.190:80 check
+    server 212831-web-02 54.88.183.190:80 check
 "
 
 # shellcheck disable=SC2154
