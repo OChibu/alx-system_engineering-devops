@@ -41,7 +41,7 @@ frontend ochibu101-frontend
         default_backend ochibu101-backend
 
 frontend ochibu101-frontend-https
-        bind *:443 ssl crt /etc/haproxy/certs/ochibu101.tech.pem
+        bind *:443 ssl crt /etc/haproxy/certs/www.ochibu101.tech.pem
         http-request set-header X-Forwarded-Proto https
         default_backend ochibu101-backend
 
