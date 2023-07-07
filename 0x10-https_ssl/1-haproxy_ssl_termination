@@ -33,13 +33,13 @@ defaults
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
 
-frontend  ochibu101-frontend
+frontend  clickviral-frontend
         bind *:80
         mode http
-        bind *:443 ssl crt /etc/haproxy/certs/www.ochibu101.tech.pem
+        bind *:443 ssl crt /etc/haproxy/certs/www.clickviral.tech.pem
         redirect scheme https if !{ ssl_fc }
-        default_backend ochibu101-backend
-backend ochibu101-backend
+        default_backend clickviral-backend
+backend clickviral-backend
         balance roundrobin
         server 212831-web-01 54.88.183.190:80 check
         server 212831-web-02 34.229.72.49:80 check
