@@ -1,13 +1,9 @@
-#!/bin/env bash
-# Check if an argument is provided then run the whoami command
-
-if [ $# -ne 1 ]; then
-  echo "Usage: $0 <username>"
+#!/usr/bin/env bash
+# Check if the user argument is provided
+if [ -z "$1" ]; then
+  echo "Please provide a user as an argument."
   exit 1
 fi
 
-# Retrieve the username from the first argument
-username=$1
-
-# Run the `whoami` command under the specified user
-sudo -u "$username" whoami
+# Run whoami command under the specified user
+sudo -u "$1" whoami
