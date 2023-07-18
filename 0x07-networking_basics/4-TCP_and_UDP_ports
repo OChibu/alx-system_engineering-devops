@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Get the list of listening sockets and their corresponding proces
+
+sudo netstat -lp
