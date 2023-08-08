@@ -1,63 +1,67 @@
 #!/usr/bin/python3
-""" Module for storing the count_words function. """
-from requests import get
+"""This module queries the reddit API"""
+import requests
+from sys import argv
 
 
-def count_words(subreddit, word_list, word_count=[], page_after=None):
+def recurse_count(subreddit, hot_list=[], after=None):
+    """This function queries the reddit API recursively
     """
-    Prints the count of the given words present in the title of the
-    subreddit's hottest articles.
-    """
-    headers = {'User-Agent': 'HolbertonSchool'}
+    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    payload = {"after": after, "limit": 100}
+    headers = {"User-Agent": "Python/requests"}
 
-    word_list = [word.lower() for word in word_list]
-
-    if bool(word_count) is False:
-        for word in word_list:
-            word_count.append(0)
-
-    if page_after is None:
-        url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
-        r = get(url, headers=headers, allow_redirects=False)
-        if r.status_code == 200:
-            for child in r.json()['data']['children']:
-                i = 0
-                for i in range(len(word_list)):
-                    for word in [w for w in child['data']['title'].split()]:
-                        word = word.lower()
-                        if word_list[i] == word:
-                            word_count[i] += 1
-                    i += 1
-
-            if r.json()['data']['after'] is not None:
-                count_words(subreddit, word_list,
-                            word_count, r.json()['data']['after'])
-    else:
-        url = ('https://www.reddit.com/r/{}/hot.json?after={}'
-               .format(subreddit,
-                       page_after))
-        r = get(url, headers=headers, allow_redirects=False)
-
-        if r.status_code == 200:
-            for child in r.json()['data']['children']:
-                i = 0
-                for i in range(len(word_list)):
-                    for word in [w for w in child['data']['title'].split()]:
-                        word = word.lower()
-                        if word_list[i] == word:
-                            word_count[i] += 1
-                    i += 1
-            if r.json()['data']['after'] is not None:
-                count_words(subreddit, word_list,
-                            word_count, r.json()['data']['after'])
+    try:
+        req = requests.get(url, headers=headers, params=payload,
+                           allow_redirects=False)
+        if req.status_code == 200:
+            data = req.json()
+            after = data.get("data")["after"]
+            for post in data.get("data")["children"]:
+                hot_list.append(post.get("data")["title"])
+            if after:
+                return recurse_count(subreddit, hot_list, after)
             else:
-                dicto = {}
-                for key_word in list(set(word_list)):
-                    i = word_list.index(key_word)
-                    if word_count[i] != 0:
-                        dicto[word_list[i]] = (word_count[i] *
-                                               word_list.count(word_list[i]))
+                return hot_list
+        else:
+            return None
+    except requests.exceptions.JSONDecodeError:
+        pass
 
-                for key, value in sorted(dicto.items(),
-                                         key=lambda x: (-x[1], x[0])):
-                    print('{}: {}'.format(key, value))
+
+def count_words(subreddit, word_list):
+    """This function queries the reddit API and
+    sorts a list of words by occurences
+    """
+    word_dict = {}
+
+    all_titles = recurse_count(subreddit)
+    word_list = [w.lower() for w in word_list]
+
+    # Only parse responses that not None
+    if all_titles:
+        for word in word_list:
+            count = 0
+            for title in all_titles:
+
+                # convert words to lowercase for comparison
+                title = [w.lower() for w in title.split()]
+
+                # Only count for present words in response
+                if word in title:
+                    for w in title:
+                        if word == w:
+                            count += 1
+            # Only add words that are present to dictionary
+            if count:
+
+                """If a word is duplicated in the function parameter
+                add all the occurrences
+                """
+                if word_dict.get(word):
+                    count += word_dict[word]
+                word_dict[word] = count
+        sorted_dict = dict(sorted(word_dict.items(),
+                           key=lambda item: item[1], reverse=True))
+        for k, v in sorted_dict.items():
+            print("{}: {:d}".format(k, v))
