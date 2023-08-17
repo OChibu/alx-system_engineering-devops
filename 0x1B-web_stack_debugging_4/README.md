@@ -1,0 +1,1 @@
+This project involves debugging and troubleshooting issues related to a web stack. The goal is to identify and fix issues that are affecting the functionality and performance of a web application. Through this project, you will gain hands-on experience in diagnosing and resolving web stack problems.
